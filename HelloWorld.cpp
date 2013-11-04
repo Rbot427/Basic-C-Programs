@@ -1,5 +1,5 @@
 #include "stdafx.h" //Don't worry about these
-#include <iostream>
+#include <iostream> //The io stands for input/output
 
 int main() //This is the main function.  This is where you start to write code
 {
