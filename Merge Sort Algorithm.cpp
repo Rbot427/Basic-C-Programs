@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include <iostream>
-#include <string>
 
 void mergeSort(float *sort, int size)
 {
@@ -64,7 +63,7 @@ int main()
 	hello = new float[counter];
 	system("cls");
 
-	std::cout << "Now enter in the numbers. Type ! when done \n";
+	std::cout << "Now enter in the numbers. Type ! when done \n"; //Take input
 	for(int count = 0; count < counter; count++) {
 	std::cout << "Number: ";
 	std::cin >> hello[count];
@@ -73,7 +72,7 @@ int main()
 
 	mergeSort(hello, counter);
 
-	for(int count = 0; count < counter; count++)
+	for(int count = 0; count < counter; count++) //Display the sorted list
 		std::cout << hello[count] << ' ';
 
 	std::cout << "\n";
