@@ -8,7 +8,7 @@ void mergeSort(float *sort, int size)
 {
 	float *Half1, *Half2; //Declare our temporary arrays
 	int size1, size2, Half1c = 0, Half2c = 0, sortc = 0;
-	if(size == 1)
+	if(size == 1) //Check to see if you can't spilt anymore, and begin the mergeing process
 		return;
 	size1 = size/2; size2 = size/2 + size % 2; //Set sizes, the % checks for odds. If it's three, Half1 will take 1 element and H2 will take 2
 
