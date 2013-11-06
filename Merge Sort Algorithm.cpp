@@ -56,7 +56,7 @@ int main()
 {
 	float *hello;
 	int counter = 0;
-	std::cout << "Hello there Mr. Wiskers \n";
+	std::cout << "Hello there Mr. Wiskers \n"; //Random intro
 	std::cout << "Enter in the amount of numbers you want sorted \n";
 	std::cin >> counter;
 
