@@ -63,7 +63,7 @@ int main()
 	hello = new float[counter];
 	system("cls");
 
-	std::cout << "Now enter in the numbers. Type ! when done \n"; //Take input
+	std::cout << "Now enter in the numbers \n"; //Take input
 	for(int count = 0; count < counter; count++) {
 	std::cout << "Number: ";
 	std::cin >> hello[count];
