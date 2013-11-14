@@ -159,7 +159,7 @@ void background::drawPlayer() {
 	glPushMatrix();
 	glTranslatef(xSize - 1, 0, 2);
 	glutSolidSphere(1, 50, 50);
-	squares[xSize - 1][0] = 2;
+	squares[xSize / 2][0] = 2;
 	glPopMatrix();
 }
 void background::movePlayer(int direction)
