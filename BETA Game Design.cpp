@@ -35,7 +35,7 @@ public:
 		square();
 		~square();
 	};
-	bool squares[xSize][ySize];
+	int squares[xSize][ySize]; //If any problems occur, change back to bool
 	background();
 	void drawBoard();
 	void drawSquares();
