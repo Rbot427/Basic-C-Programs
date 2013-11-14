@@ -157,7 +157,7 @@ void background::drawPlayer() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	//glColor3f(0, 1.0, 0);
 	glPushMatrix();
-	glTranslatef(xSize - 1, 0, 0);
+	glTranslatef(xSize - 1, 0, 2);
 	glutSolidSphere(1, 50, 50);
 	squares[xSize - 1][0] = 2;
 	glPopMatrix();
