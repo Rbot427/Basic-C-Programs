@@ -52,6 +52,28 @@ void mergeSort(float *sort, int size)
 	delete Half2; 
 }
 
+bool binarySearch(float *sort, int size, float target)
+{
+        int first = 0, last = size, test;
+
+        if(size == 1 && sort[0] == target)
+                return true;
+
+        while(first + 1 < last)  
+        {
+                test = (first + last) / 2;
+                if(sort[test] > target)
+                        last = test;
+                else
+                        first = test;
+        }
+
+        if(sort[first] == target)
+                return true;
+        else
+                return false;
+}
+
 int main()
 {
 	float *hello;
