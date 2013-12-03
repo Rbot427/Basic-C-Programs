@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <glut.h>
 #include <math.h>
@@ -21,11 +20,14 @@ using namespace std;
 #define LEFT 1
 #define RIGHT 2
 #define DOWN 3
+#define NONE 4
 void init();
-int globalX = 0;
-int globalY = 0;
-int globalZ = 0;
+int globalX = 10;
+int globalY = -17;
+int globalZ = 27;
+int globalDirection = NONE;
 bool start = true;
+
 
 class background {
 public:
@@ -35,7 +37,7 @@ public:
 		square();
 		~square();
 	};
-	int squares[xSize][ySize]; //If any problems occur, change back to bool
+	int squares[xSize][ySize];
 	background();
 	void drawBoard();
 	void drawSquares();
@@ -44,6 +46,7 @@ public:
 	void printSquares();
 	void drawPlayer();
 	void movePlayer(int direction);
+	void redisplay();
 	~background();
 
 };
@@ -72,11 +75,9 @@ void background::drawSquares() {
 			isOb = rand() % 10;
 			if(isOb == 0)
 			{
-				//This if ensures a space to place the player
-				if(count2 != xSize/2 && count != 0)
+				if(count2 != xSize/2 && count != 0)//This if ensures a space to place the player
 				{
-				//Store where the squares are
-				glutSolidCube(2.0);
+				glutSolidCube(2.0);//Store where the squares are
 				squares[count2][count] = true;
 				}
 				glTranslatef(2.0, 0, 0);
@@ -155,39 +156,52 @@ void background::printSquares()
 void background::drawPlayer() {
 	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-	//glColor3f(0, 1.0, 0);
 	glPushMatrix();
 	glTranslatef(xSize - 1, 0, 2);
 	glutSolidSphere(1, 50, 50);
-	squares[xSize / 2][0] = 2;
+	squares[xSize /2][0] = 2;
 	glPopMatrix();
 }
 void background::movePlayer(int direction)
 {
-	glPushMatrix();
+	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
+	static int x = xSize / 2, y = 0;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glColor3f(0, 1, 0);
+	glPushMatrix();
+	glTranslatef(x * 2, y * 2, 0);
+	globalDirection = direction;
 	switch(direction)
 	{
 	case UP:
 		glTranslatef(0, 2, 0);
 		glutSolidSphere(1, 50, 50);
+		squares[x][y] = 0; squares[x][y + 1] = 2; y++; 
 		break;
 	case LEFT:
 		glTranslatef(-2, 0, 0);
 		glutSolidSphere(1, 50, 50);
+		squares[x][y] = 0; squares[x - 1][y] = 2; x += -1; 
 		break;
 	case RIGHT:
 		glTranslatef(2, 0, 0);
 		glutSolidSphere(1, 50, 50);
+		squares[x][y] = 0; squares[x + 1][y] = 2; x++;
 		break;
 	case DOWN:
 		glTranslatef(0, -2, 0);
 		glutSolidSphere(1, 50, 50);
+		squares[x][y] = 0; squares[x][y - 1] = 2; y += -1; 
+		break;
+	default:
 		break;
 	}
 	glPopMatrix();
-	glutPostRedisplay();
+}
+void background::redisplay()
+{
+
 }
 background::~background() {
 
@@ -197,15 +211,18 @@ background::~background() {
 background myBackground;
 
 void display() {
-	glClearColor(0.7, 0.7, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	
 	myBackground.drawBoard();
 	if(start)
 	{
 	myBackground.drawSquares();
-	myBackground.drawPlayer();
+	
 	start = false;
 	}
-	myBackground.printSquares();
+	myBackground.drawPlayer();
 	myBackground.redrawSquares();
 	glFlush();
 }
@@ -222,42 +239,40 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 		myBackground.printSquares();
 		glutPostRedisplay();
 		break;
-		/*case 'w' :
+		case 'w' :
 		  globalY++;
-		  myBackground.drawSquares();
+		 init();
 	break;
       case 'a' :
 		  globalX--;
-		  myBackground.drawSquares();
+		 init();
 	break;
       case 's' :
 		  globalY--;
-		  myBackground.drawSquares();
+		  init();
 	break;
 	  case 'd':
 		  globalX++;
-		  myBackground.drawSquares();
+		 init();
 	break;
 	  case 'e':
 		  globalZ++;
-		  myBackground.drawSquares();
+		  init();
 		  break;
 	  case 'q':
 		  globalZ--;
-		  myBackground.drawSquares();
+		  init();
 		  break;
 	  case 'r':
 		  system("cls");
 		  break;
-		  */
     }   
 	
 }
 void special_key_handler(int key,int xi,int yi) 
 {
 	//Come back to this
-
-	/*switch(key)
+	switch(key)
 	{
 	case GLUT_KEY_LEFT:
 		myBackground.movePlayer(LEFT);
@@ -271,8 +286,9 @@ void special_key_handler(int key,int xi,int yi)
 	case GLUT_KEY_DOWN:
 		myBackground.movePlayer(DOWN);
 		break;
+		glutPostRedisplay();
 	}
-	*/
+	
 }
 
 void init() {
@@ -283,14 +299,14 @@ void init() {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(10, -17, 27, 10, 10, 0, 0, 1, 0);
+	gluLookAt(globalX, globalY, globalZ, 10, 10, 0, 0, 1, 0);
 
 	//lighting
 	
 	glColor3f(1, 0, 0);
 	GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat mat_shininess[] = {50.0};
-	GLfloat light_position[] = {1, 1, 1, 0};
+	GLfloat light_position[] = {30, 0, 27, 1};
 	GLfloat white_light[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat lmodel_ambient[] = {1, 1, 1, 1.0};
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -303,10 +319,7 @@ void init() {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_NORMALIZE);
 	glutPostRedisplay();
-
-	
 }
 
 void prog_cont() {
