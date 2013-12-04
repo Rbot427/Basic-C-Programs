@@ -172,7 +172,7 @@ void background::movePlayer(int direction)
 	switch(direction)
 	{
 	case UP:
-		if(squares[x][y+1] != 0)
+		if(squares[x][y+1] != 0 || y+1 > ySize-1)//The ySize-1 fixes the boundries, fixed #8
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -181,7 +181,7 @@ void background::movePlayer(int direction)
 		squares[x][y] = 0; squares[x][y + 1] = 2; y++; 
 		break;
 	case LEFT:
-		if(squares[x-1][y] != 0)
+		if(squares[x-1][y] != 0 || x-1 < 0)
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -190,7 +190,7 @@ void background::movePlayer(int direction)
 		squares[x][y] = 0; squares[x - 1][y] = 2; x += -1; 
 		break;
 	case RIGHT:
-		if(squares[x+1][y] != 0)
+		if(squares[x+1][y] != 0 || x+1 > xSize-1)//The xSize-1 adds a fix to the boundries, fixed #8
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
