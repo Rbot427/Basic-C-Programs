@@ -14,6 +14,8 @@ using namespace std;
 
 #define xSize 11
 #define ySize 11
+#define max 1
+#define min 0
 #define UP 0
 #define LEFT 1
 #define RIGHT 2
@@ -53,7 +55,7 @@ background::background() {
 	{
 		for(int count2 = 0; count2 < xSize; count2++)
 		{
-			squares[count2][count] = false;
+			squares[count2][count] = 0;
 		}
 	}
 }
@@ -168,8 +170,8 @@ void background::movePlayer(int direction)
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glColor3f(0, 1, 0);
 	glPushMatrix();
-	glTranslatef(x * 2, y * 2, 0);
-	globalDirection = direction;
+	glTranslatef(x * 2, y * 2, 2);
+	globalDirection = direction; //Might want to delete the global direction
 	switch(direction)
 	{
 	case UP:
@@ -212,16 +214,17 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	
-	myBackground.drawBoard();
 	if(start)
 	{
 	myBackground.drawSquares();
-	
+	myBackground.drawPlayer();
 	start = false;
 	}
-	myBackground.drawPlayer();
+	else
+		myBackground.movePlayer(globalDirection);
+	myBackground.drawBoard();
 	myBackground.redrawSquares();
+	
 	glFlush();
 }
 void getGlobal()
@@ -235,7 +238,6 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 		//creating bugs
 		//myBackground.newBoard();
 		myBackground.printSquares();
-		glutPostRedisplay();
 		break;
 		case 'w' :
 		  globalY++;
@@ -273,20 +275,19 @@ void special_key_handler(int key,int xi,int yi)
 	switch(key)
 	{
 	case GLUT_KEY_LEFT:
-		myBackground.movePlayer(LEFT);
+		globalDirection = LEFT;
 		break;
 	case GLUT_KEY_UP:
-		myBackground.movePlayer(UP);
+		globalDirection = UP;
 		break;
 	case GLUT_KEY_RIGHT:
-		myBackground.movePlayer(RIGHT);
+		globalDirection = RIGHT;
 		break;
 	case GLUT_KEY_DOWN:
-		myBackground.movePlayer(DOWN);
+		globalDirection = DOWN;
 		break;
-		glutPostRedisplay();
 	}
-	
+	init();
 }
 
 void init() {
@@ -304,7 +305,7 @@ void init() {
 	glColor3f(1, 0, 0);
 	GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat mat_shininess[] = {50.0};
-	GLfloat light_position[] = {30, 0, 27, 1};
+	GLfloat light_position[] = {30, 0, 27, 0};
 	GLfloat white_light[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat lmodel_ambient[] = {1, 1, 1, 1.0};
 	glClearColor(0.0, 0.0, 0.0, 0.0);
