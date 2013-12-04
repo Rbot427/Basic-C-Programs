@@ -14,8 +14,6 @@ using namespace std;
 
 #define xSize 11
 #define ySize 11
-#define max 1
-#define min 0
 #define UP 0
 #define LEFT 1
 #define RIGHT 2
