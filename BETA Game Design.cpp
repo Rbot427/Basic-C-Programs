@@ -199,7 +199,7 @@ void background::movePlayer(int direction)
 		squares[x][y] = 0; squares[x + 1][y] = 2; x++;
 		break;
 	case DOWN:
-		if(squares[x][y-1] != 0)
+		if(squares[x][y-1] != 0 || y-1 < 0)
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
