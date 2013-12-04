@@ -166,33 +166,49 @@ void background::movePlayer(int direction)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	static int x = xSize / 2, y = 0;
 	glClear(GL_COLOR_BUFFER_BIT);
-	//glColor3f(0, 1, 0);
 	glPushMatrix();
 	glTranslatef(x * 2, y * 2, 2);
 	globalDirection = direction; //Might want to delete the global direction
 	switch(direction)
 	{
 	case UP:
-		glTranslatef(0, 2, 0);
-		glutSolidSphere(1, 50, 50);
+		if(squares[x][y+1] != 0)
+		{
+			glutSolidSphere(1, 50, 50);
+			break;
+		}
+		glTranslatef(0, 2, 0); glutSolidSphere(1, 50, 50);
 		squares[x][y] = 0; squares[x][y + 1] = 2; y++; 
 		break;
 	case LEFT:
-		glTranslatef(-2, 0, 0);
-		glutSolidSphere(1, 50, 50);
+		if(squares[x-1][y] != 0)
+		{
+			glutSolidSphere(1, 50, 50);
+			break;
+		}
+		glTranslatef(-2, 0, 0); glutSolidSphere(1, 50, 50);
 		squares[x][y] = 0; squares[x - 1][y] = 2; x += -1; 
 		break;
 	case RIGHT:
-		glTranslatef(2, 0, 0);
-		glutSolidSphere(1, 50, 50);
+		if(squares[x+1][y] != 0)
+		{
+			glutSolidSphere(1, 50, 50);
+			break;
+		}
+		glTranslatef(2, 0, 0); glutSolidSphere(1, 50, 50);
 		squares[x][y] = 0; squares[x + 1][y] = 2; x++;
 		break;
 	case DOWN:
-		glTranslatef(0, -2, 0);
-		glutSolidSphere(1, 50, 50);
+		if(squares[x][y-1] != 0)
+		{
+			glutSolidSphere(1, 50, 50);
+			break;
+		}
+		glTranslatef(0, -2, 0); glutSolidSphere(1, 50, 50);
 		squares[x][y] = 0; squares[x][y - 1] = 2; y += -1; 
 		break;
 	default:
+		glutSolidSphere(1, 50, 50);
 		break;
 	}
 	glPopMatrix();
@@ -225,7 +241,7 @@ void display() {
 	
 	glFlush();
 }
-void getGlobal()
+void getGlobal()//Don't need this function anymore
 {
 	cout << globalX << "\n" << globalY << "\n" << globalZ << "\n";
 }
@@ -233,8 +249,6 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 	switch(c)
 	{
 	case 'g':
-		//creating bugs
-		//myBackground.newBoard();
 		myBackground.printSquares();
 		break;
 		case 'w' :
@@ -265,7 +279,7 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 		  system("cls");
 		  break;
     }   
-	
+	globalDirection = NONE;
 }
 void special_key_handler(int key,int xi,int yi) 
 {
