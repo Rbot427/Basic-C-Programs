@@ -48,7 +48,7 @@ public:
 	~background();
 
 };
-background::background() {
+background::background() {//constructor, used to set every element in the array to 0
 	for(int count = 0; count < ySize; count++)
 	{
 		for(int count2 = 0; count2 < xSize; count2++)
@@ -57,12 +57,12 @@ background::background() {
 		}
 	}
 }
-void background::drawSquares() {
+void background::drawSquares() {//Only runs once on startup to generate random squares
 	int isOb;
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	srand(time(0));
-    glPushMatrix();
+        glPushMatrix();
 	glTranslatef(0, 0, 2.0);
 	glColor3f(1.0, 0.0, 0.0);
 	for(int count = 0; count < ySize; count++)
@@ -89,7 +89,7 @@ void background::drawSquares() {
 	glPopMatrix();
 	glFlush();
 }
-void background::redrawSquares()
+void background::redrawSquares()//This function is used so it doesn't keep generating random numbers each player movement
 {
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
@@ -139,7 +139,7 @@ void background::newBoard()
 	drawBoard();
 	drawSquares();
 }
-void background::printSquares()
+void background::printSquares()//Very userful function for debugging.  Displays where each peice is on the terminal window
 {
 	system("cls");
 	for(int count = 0; count < ySize; count++)
@@ -151,7 +151,7 @@ void background::printSquares()
 		cout << "\n";
 	}
 }
-void background::drawPlayer() {
+void background::drawPlayer() {//This draws the player once, I probably could eliminate this later on
 	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	glPushMatrix();
@@ -164,15 +164,15 @@ void background::movePlayer(int direction)
 {
 	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-	static int x = xSize / 2, y = 0;
+	static int x = xSize / 2, y = 0;//Sadly, my first static varible
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPushMatrix();
 	glTranslatef(x * 2, y * 2, 2);
-	globalDirection = direction; //Might want to delete the global direction
+	globalDirection = direction; //Check if global varible is needed
 	switch(direction)
 	{
 	case UP:
-		if(squares[x][y+1] != 0 || y+1 > ySize-1)//The ySize-1 fixes the boundries, fixed #8
+		if(squares[x][y+1] != 0 || y+1 > ySize-1)//The ySize-1 fixes the boundries, fixes #8
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -190,7 +190,7 @@ void background::movePlayer(int direction)
 		squares[x][y] = 0; squares[x - 1][y] = 2; x += -1; 
 		break;
 	case RIGHT:
-		if(squares[x+1][y] != 0 || x+1 > xSize-1)//The xSize-1 adds a fix to the boundries, fixed #8
+		if(squares[x+1][y] != 0 || x+1 > xSize-1)//The xSize-1 adds a fix to the boundries, fixes #8
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -217,14 +217,14 @@ void background::redisplay()
 {
 
 }
-background::~background() {
+background::~background() {//No destructor yet, TODO: Figure out how to properly close a openGL window
 
 }
 
 //Create an object entitled myBackground
 background myBackground;
 
-void display() {
+void display() {//A function containing multiple display functions
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -235,7 +235,7 @@ void display() {
 	start = false;
 	}
 	else
-		myBackground.movePlayer(globalDirection);
+	myBackground.movePlayer(globalDirection);//Have to use this variable, otherwise, the player wont display
 	myBackground.drawBoard();
 	myBackground.redrawSquares();
 	
@@ -340,8 +340,8 @@ int main(int argc, _TCHAR* argv[])
 {
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowPosition(0, 0);
-  glutInitWindowSize(500, 500);
-  glutCreateWindow("RUN!!!");
+  glutInitWindowSize(500, 500);//I can also change the window size if I need to
+  glutCreateWindow("RUN!!!");//Change the name maybe? XD
   init();
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard_handler);
