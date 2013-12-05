@@ -3,15 +3,18 @@
 
 #include "stdafx.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <glut.h>
 #include <math.h>
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <sstream>
 
 using namespace std;
 
+//Declerations
 #define xSize 11
 #define ySize 11
 #define UP 0
@@ -19,13 +22,16 @@ using namespace std;
 #define RIGHT 2
 #define DOWN 3
 #define NONE 4
-void init();
-int globalX = 10;
-int globalY = -17;
-int globalZ = 27;
+#define DOIT true
+
+//Globial Varibles (Try to eliminate some)
+int globalX = xSize, globalY = ySize / 11 * -17, globalZ = xSize / 11 * 27; //Added ratios to adjust viewing on board size change
 int globalDirection = NONE;
 bool start = true;
 
+//Declaring funcitons
+void init();
+//bool loadConfig();
 
 class background {
 public:
@@ -44,11 +50,12 @@ public:
 	void printSquares();
 	void drawPlayer();
 	void movePlayer(int direction);
+	void drawAI();
 	void redisplay();
 	~background();
 
 };
-background::background() {//constructor, used to set every element in the array to 0
+background::background() {
 	for(int count = 0; count < ySize; count++)
 	{
 		for(int count2 = 0; count2 < xSize; count2++)
@@ -57,12 +64,12 @@ background::background() {//constructor, used to set every element in the array 
 		}
 	}
 }
-void background::drawSquares() {//Only runs once on startup to generate random squares
+void background::drawSquares() {
 	int isOb;
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	srand(time(0));
-        glPushMatrix();
+    glPushMatrix();
 	glTranslatef(0, 0, 2.0);
 	glColor3f(1.0, 0.0, 0.0);
 	for(int count = 0; count < ySize; count++)
@@ -89,7 +96,7 @@ void background::drawSquares() {//Only runs once on startup to generate random s
 	glPopMatrix();
 	glFlush();
 }
-void background::redrawSquares()//This function is used so it doesn't keep generating random numbers each player movement
+void background::redrawSquares()
 {
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
@@ -139,7 +146,7 @@ void background::newBoard()
 	drawBoard();
 	drawSquares();
 }
-void background::printSquares()//Very userful function for debugging.  Displays where each peice is on the terminal window
+void background::printSquares()
 {
 	system("cls");
 	for(int count = 0; count < ySize; count++)
@@ -151,7 +158,7 @@ void background::printSquares()//Very userful function for debugging.  Displays 
 		cout << "\n";
 	}
 }
-void background::drawPlayer() {//This draws the player once, I probably could eliminate this later on
+void background::drawPlayer() {
 	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	glPushMatrix();
@@ -164,15 +171,15 @@ void background::movePlayer(int direction)
 {
 	GLfloat mat_amb_diff[] = {0, 1, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-	static int x = xSize / 2, y = 0;//Sadly, my first static varible
+	static int x = xSize / 2, y = 0;
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPushMatrix();
 	glTranslatef(x * 2, y * 2, 2);
-	globalDirection = direction; //Check if global varible is needed
+	globalDirection = direction; //Might want to delete the global direction
 	switch(direction)
 	{
 	case UP:
-		if(squares[x][y+1] != 0 || y+1 > ySize-1)//The ySize-1 fixes the boundries, fixes #8
+		if(squares[x][y+1] != 0 || y+1 > ySize - 1)
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -190,7 +197,7 @@ void background::movePlayer(int direction)
 		squares[x][y] = 0; squares[x - 1][y] = 2; x += -1; 
 		break;
 	case RIGHT:
-		if(squares[x+1][y] != 0 || x+1 > xSize-1)//The xSize-1 adds a fix to the boundries, fixes #8
+		if(squares[x+1][y] != 0 || x+1 > xSize-1)//The xSize-1 adds a fix to the boundries
 		{
 			glutSolidSphere(1, 50, 50);
 			break;
@@ -213,18 +220,24 @@ void background::movePlayer(int direction)
 	}
 	glPopMatrix();
 }
+void background::drawAI()
+{
+	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
+
+}
 void background::redisplay()
 {
 
 }
-background::~background() {//No destructor yet, TODO: Figure out how to properly close a openGL window
+background::~background() {
 
 }
 
 //Create an object entitled myBackground
 background myBackground;
 
-void display() {//A function containing multiple display functions
+void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -235,7 +248,7 @@ void display() {//A function containing multiple display functions
 	start = false;
 	}
 	else
-	myBackground.movePlayer(globalDirection);//Have to use this variable, otherwise, the player wont display
+		myBackground.movePlayer(globalDirection);
 	myBackground.drawBoard();
 	myBackground.redrawSquares();
 	
@@ -278,6 +291,9 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 	  case 'r':
 		  system("cls");
 		  break;
+	  //case 'l':
+		 // loadConfig();
+		 // break;
     }   
 	globalDirection = NONE;
 }
@@ -306,11 +322,11 @@ void init() {
     glClearColor(0.8, 0.8, 0, 0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, 1, 1, 100);
+	gluPerspective(60, 1, 1, 200);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(globalX, globalY, globalZ, 10, 10, 0, 0, 1, 0);
+	gluLookAt(globalX, globalY, globalZ, xSize, ySize, 0, 0, 1, 0);
 
 	//lighting
 	
@@ -335,18 +351,40 @@ void init() {
 
 void prog_cont() {
 }
-
+/*
+bool loadConfig()
+{
+	FILE *fp1; char c = 0; stringstream XSize;
+	if(DOIT){
+	fp1 = fopen("config.txt", "rb");
+	while(c != ':')
+		c = fgetc(fp1);
+	for(int count = 0; c != 'Y'; count++){
+		cout << "C is " << c;
+		c = fgetc(fp1);
+		XSize << c;
+	}
+		int result;
+		XSize >> result;
+		cout << result;
+		return true;
+	}
+	else
+		return false;
+}
+*/
 int main(int argc, _TCHAR* argv[])
 {
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowPosition(0, 0);
-  glutInitWindowSize(500, 500);//I can also change the window size if I need to
-  glutCreateWindow("RUN!!!");//Change the name maybe? XD
-  init();
-  glutDisplayFunc(display);
-  glutKeyboardFunc(keyboard_handler);
-  
-  glutIdleFunc(prog_cont);
-  glutSpecialFunc(special_key_handler);
-  glutMainLoop();
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowPosition(0, 0);
+	glutInitWindowSize(500, 500);
+	glutCreateWindow("RUN!!!");
+	init();
+
+	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard_handler);
+	glutIdleFunc(prog_cont);
+	glutSpecialFunc(special_key_handler);
+
+	glutMainLoop();
 }
