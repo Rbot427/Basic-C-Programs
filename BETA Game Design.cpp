@@ -41,18 +41,17 @@ public:
 		square();
 		~square();
 	};
-	int squares[xSize][ySize];
-	background();
-	void drawBoard();
-	void drawSquares();
-	void redrawSquares();
-	void newBoard();
-	void printSquares();
-	void drawPlayer();
-	void movePlayer(int direction);
-	void drawAI();
-	void redisplay();
-	~background();
+	int squares[xSize][ySize];//Stores where each peice is on the board
+	background(); //Constructor, puts 0 in each of the squares elements
+	void drawBoard();//Draws the board.  This is done primarily using glTranslatef() and glutSolidCube()
+	void drawSquares();//Draws squares at random locations (except for xSize / 2) using the rand() function
+	void redrawSquares();//This is the same as the drawSquares() function but it doesn't include the rand() function
+	void newBoard();//This was suppose to be used early on, still deciding if it will be implemented
+	void printSquares();//Prints the squares[][] array
+	void drawPlayer();//Draws the player peice at a default of xSize / 2
+	void movePlayer(int direction);//Moves the player using the squares[][] array and glTranslatef().  Takes a direction
+	void drawAI();//In progress
+	~background();//In progress, when I figures out how to safely close a windows window
 
 };
 background::background() {
@@ -220,18 +219,12 @@ void background::movePlayer(int direction)
 	}
 	glPopMatrix();
 }
-void background::drawAI()
+void background::drawAI()//TODO: Well, draw the AI
 {
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-
-}
-void background::redisplay()
-{
-
 }
 background::~background() {
-
 }
 
 //Create an object entitled myBackground
@@ -299,7 +292,6 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 }
 void special_key_handler(int key,int xi,int yi) 
 {
-	//Come back to this
 	switch(key)
 	{
 	case GLUT_KEY_LEFT:
