@@ -108,7 +108,9 @@ void background::redrawSquares()
 		for(int count2 = 0; count2 < xSize; count2++)
 		{
 			if(squares[count2][count] == 1)
-			glutSolidCube(2.0);
+				glutSolidCube(2.0);
+			if(squares[count2][count] == 3)
+				glutSolidSphere(1, 50, 50);
 			glTranslatef(2, 0, 0);
 		}
 		glPopMatrix();
@@ -223,6 +225,20 @@ void background::drawAI()//TODO: Well, draw the AI
 {
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
+	int counter = 0, posX = 0, posY = 0;
+	glPushMatrix();
+	while(counter != 3)
+	{
+		srand(time(0)); posX = rand() % xSize;//This causes some lag
+		srand(time(0)); posY = rand() % ySize;
+		if(squares[posX][posY] == 0)
+		{
+			glTranslatef(posX * 2, posY * 2, 2);
+			glutSolidSphere(1, 50, 50); squares[posX][posY] = 3;
+			counter++; glTranslatef(-posX * 2, -posY * 2, -2);
+		}
+	}
+	glPopMatrix;
 }
 background::~background() {
 }
@@ -238,6 +254,7 @@ void display() {
 	{
 	myBackground.drawSquares();
 	myBackground.drawPlayer();
+	myBackground.drawAI();
 	start = false;
 	}
 	else
