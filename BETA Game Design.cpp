@@ -226,11 +226,11 @@ void background::drawAI()//TODO: Well, draw the AI
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	int counter = 0, posX = 0, posY = 0;
-	glPushMatrix();
+	glPushMatrix(); srand(time(0));
 	while(counter != 3)
 	{
-		srand(time(0)); posX = rand() % xSize;//This causes some lag
-		srand(time(0)); posY = rand() % ySize;
+		posX = rand() % xSize;
+		posY = rand() % ySize;
 		if(squares[posX][posY] == 0)
 		{
 			glTranslatef(posX * 2, posY * 2, 2);
