@@ -68,7 +68,7 @@ void background::drawSquares() {
 	GLfloat mat_amb_diff[] = {1, 0, 0, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	srand(time(0));
-    glPushMatrix();
+	glPushMatrix();
 	glTranslatef(0, 0, 2.0);
 	glColor3f(1.0, 0.0, 0.0);
 	for(int count = 0; count < ySize; count++)
@@ -81,13 +81,13 @@ void background::drawSquares() {
 			{
 				if(count2 != xSize/2 && count != 0)//This if ensures a space to place the player
 				{
-				glutSolidCube(2.0);//Store where the squares are
-				squares[count2][count] = true;
+					glutSolidCube(2.0);//Store where the squares are
+					squares[count2][count] = true;
 				}
 				glTranslatef(2.0, 0, 0);
 			}
 			else
-			glTranslatef(2.0, 0, 0);
+				glTranslatef(2.0, 0, 0);
 		}
 		glPopMatrix();
 		glTranslatef(0, 2.0, 0);
@@ -143,7 +143,7 @@ void background::drawBoard()
 void background::newBoard()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-    background();
+	background();
 	drawBoard();
 	drawSquares();
 }
@@ -252,16 +252,16 @@ void display() {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	if(start)
 	{
-	myBackground.drawSquares();
-	myBackground.drawPlayer();
-	myBackground.drawAI();
-	start = false;
+		myBackground.drawSquares();
+		myBackground.drawPlayer();
+		myBackground.drawAI();
+		start = false;
 	}
 	else
 		myBackground.movePlayer(globalDirection);
 	myBackground.drawBoard();
 	myBackground.redrawSquares();
-	
+
 	glFlush();
 }
 void getGlobal()//Don't need this function anymore
@@ -274,37 +274,37 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 	case 'g':
 		myBackground.printSquares();
 		break;
-		case 'w' :
-		  globalY++;
-		 init();
-	break;
-      case 'a' :
-		  globalX--;
-		 init();
-	break;
-      case 's' :
-		  globalY--;
-		  init();
-	break;
-	  case 'd':
-		  globalX++;
-		 init();
-	break;
-	  case 'e':
-		  globalZ++;
-		  init();
-		  break;
-	  case 'q':
-		  globalZ--;
-		  init();
-		  break;
-	  case 'r':
-		  system("cls");
-		  break;
-	  //case 'l':
-		 // loadConfig();
-		 // break;
-    }   
+	case 'w' :
+		globalY++;
+		init();
+		break;
+	case 'a' :
+		globalX--;
+		init();
+		break;
+	case 's' :
+		globalY--;
+		init();
+		break;
+	case 'd':
+		globalX++;
+		init();
+		break;
+	case 'e':
+		globalZ++;
+		init();
+		break;
+	case 'q':
+		globalZ--;
+		init();
+		break;
+	case 'r':
+		system("cls");
+		break;
+		//case 'l':
+		// loadConfig();
+		// break;
+	}   
 	globalDirection = NONE;
 }
 void special_key_handler(int key,int xi,int yi) 
@@ -328,7 +328,7 @@ void special_key_handler(int key,int xi,int yi)
 }
 
 void init() {
-    glClearColor(0.8, 0.8, 0, 0);
+	glClearColor(0.8, 0.8, 0, 0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60, 1, 1, 200);
@@ -338,7 +338,7 @@ void init() {
 	gluLookAt(globalX, globalY, globalZ, xSize, ySize, 0, 0, 1, 0);
 
 	//lighting
-	
+
 	glColor3f(1, 0, 0);
 	GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat mat_shininess[] = {50.0};
@@ -363,23 +363,23 @@ void prog_cont() {
 /*
 bool loadConfig()
 {
-	FILE *fp1; char c = 0; stringstream XSize;
-	if(DOIT){
-	fp1 = fopen("config.txt", "rb");
-	while(c != ':')
-		c = fgetc(fp1);
-	for(int count = 0; c != 'Y'; count++){
-		cout << "C is " << c;
-		c = fgetc(fp1);
-		XSize << c;
-	}
-		int result;
-		XSize >> result;
-		cout << result;
-		return true;
-	}
-	else
-		return false;
+FILE *fp1; char c = 0; stringstream XSize;
+if(DOIT){
+fp1 = fopen("config.txt", "rb");
+while(c != ':')
+c = fgetc(fp1);
+for(int count = 0; c != 'Y'; count++){
+cout << "C is " << c;
+c = fgetc(fp1);
+XSize << c;
+}
+int result;
+XSize >> result;
+cout << result;
+return true;
+}
+else
+return false;
 }
 */
 int main(int argc, _TCHAR* argv[])
