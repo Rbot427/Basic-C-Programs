@@ -17,6 +17,7 @@ using namespace std;
 //Declerations
 #define xSize 11
 #define ySize 11
+#define numAI 1
 #define UP 0
 #define LEFT 1
 #define RIGHT 2
@@ -50,7 +51,8 @@ public:
 	void printSquares();//Prints the squares[][] array
 	void drawPlayer();//Draws the player peice at a default of xSize / 2
 	void movePlayer(int direction);//Moves the player using the squares[][] array and glTranslatef().  Takes a direction
-	void redrawAI();
+	void redrawAI();//Just redraws the AI, used so they don't randomly generate again
+	void winCheck(); //Checks to see if the game has been won
 	~background();//In progress, when I figures out how to safely close a windows window
 
 };
@@ -68,9 +70,7 @@ public:
 	void createAI();
 	void moveAI();
 	void printPos();
-	void updatePos(int newX, int newy);
-	~AI();
-	int x[3]; int y[3];
+	int x[numAI]; int y[numAI];
 };
 player myPlayer;
 AI myAI;
@@ -143,7 +143,7 @@ void background::redrawAI()
 {
 	GLfloat mat_amb_diff[] = {255/255, 36/255, 215/255, 1};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-	for(int counter = 0; counter < 3; counter++)
+	for(int counter = 0; counter < numAI; counter++)
 	{
 		glTranslatef(myAI.x[counter] * 2, myAI.y[counter] * 2, 2); glutSolidSphere(1, 50, 50); glTranslatef(-myAI.x[counter] * 2, -myAI.y[counter] * 2, -2);
 	}
@@ -196,6 +196,17 @@ void background::drawPlayer() {
 	glutSolidSphere(1, 50, 50);
 	squares[xSize /2][0] = 2;
 	glPopMatrix();
+}
+void background::winCheck() {
+	for(int counter = 0; counter < numAI; counter++)
+	{
+		if(myPlayer.x == myAI.x[counter] && myPlayer.y == myAI.y[counter])
+		{
+			cout << "YOU LOSE!\n";
+			system("Pause");
+			exit(0);
+		}
+	}
 }
 void background::movePlayer(int direction)
 {
@@ -277,7 +288,7 @@ void AI::createAI()
 	cout << "Creating AI... \n";
 	int counter = 0, posX = 0, posY = 0;
 	glPushMatrix(); srand(time(0));
-	while(counter != 3)
+	while(counter != numAI)
 	{
 		posX = rand() % xSize;
 		posY = rand() % ySize;
@@ -289,12 +300,11 @@ void AI::createAI()
 			counter++; glTranslatef(-posX * 2, -posY * 2, -2);
 		}
 	}
-	glPopMatrix;
 	cout << "Done!\n";
 
 }
 void AI::printPos() {
-	for(int count = 0; count < 3; count++)
+	for(int count = 0; count < numAI; count++)
 		cout << "\n" << x[count] << ", " << y[count] << "\n";
 }
 void AI::moveAI()//has to be called after a player movement
@@ -303,7 +313,7 @@ void AI::moveAI()//has to be called after a player movement
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
 	long float min = 10000000000, distance = 0;
 	int direction = NONE;
-	for(int counter = 0; counter < 3; counter++)
+	for(int counter = 0; counter < numAI; counter++)
 	{
 		distance = sqrtf((myPlayer.y - y[counter])*(myPlayer.y - y[counter])) + ((myPlayer.x - x[counter])*(myPlayer.x - x[counter]));
 		if(distance < min){
@@ -364,12 +374,6 @@ void AI::moveAI()//has to be called after a player movement
 		min = 10000000000000;
 	}
 }
-void AI::updatePos(int newX, int newY) {
-	
-}
-AI::~AI()
-{
-}
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -383,13 +387,13 @@ void display() {
 	}
 	else
 	{
-		myBackground.movePlayer(globalDirection); myBackground.redrawAI();
+		myBackground.movePlayer(globalDirection); myBackground.redrawAI(); 
 	}	
 	myBackground.drawBoard();
 	myBackground.redrawSquares();
-
 	
 	glFlush();
+	myBackground.winCheck();
 }
 void getGlobal()//Don't need this function anymore
 {
@@ -428,6 +432,10 @@ void keyboard_handler(unsigned char c,int xi,int yi){
 	  case 'r':
 		  system("cls");
 		  break;
+	  case 'f':
+		  if(myBackground.squares[myPlayer.x][myPlayer.y-1] == 0)
+			myBackground.squares[myPlayer.x][myPlayer.y-1] = 1;
+		  init();
 	  //case 'l':
 		 // loadConfig();
 		 // break;
@@ -463,6 +471,9 @@ void init() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(globalX, globalY, globalZ, xSize, ySize, 0, 0, 1, 0);
+
+	//Mouse
+	glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 
 	//lighting
 	
@@ -523,6 +534,6 @@ int main(int argc, _TCHAR* argv[])
 	glutKeyboardFunc(keyboard_handler);
 	glutIdleFunc(prog_cont);
 	glutSpecialFunc(special_key_handler);
-
+	
 	glutMainLoop();
 }
