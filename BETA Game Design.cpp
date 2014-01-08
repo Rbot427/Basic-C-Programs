@@ -15,9 +15,9 @@
 using namespace std;
 
 //Declerations
-#define xSize 11
-#define ySize 11
-#define numAI 1
+#define xSize 55
+#define ySize 55
+#define numAI 11
 #define UP 0
 #define LEFT 1
 #define RIGHT 2
@@ -42,7 +42,7 @@ public:
 		square();
 		~square();
 	};
-	int squares[xSize][ySize];//Stores where each peice is on the board
+	int squares[xSize][ySize], moves;//Stores where each peice is on the board
 	background(); //Constructor, puts 0 in each of the squares elements
 	void drawBoard();//Draws the board.  This is done primarily using glTranslatef() and glutSolidCube()
 	void drawSquares();//Draws squares at random locations (except for xSize / 2) using the rand() function
@@ -202,9 +202,9 @@ void background::winCheck() {
 	{
 		if(myPlayer.x == myAI.x[counter] && myPlayer.y == myAI.y[counter])
 		{
-			cout << "YOU LOSE!\n";
+			cout << "YOU LOSE!\n" << "You made " << moves << " moves before you met your demise\n";
 			system("Pause");
-			exit(0);
+			exit(0x000000);
 		}
 	}
 }
@@ -260,6 +260,7 @@ void background::movePlayer(int direction)
 		break;
 	}
 	glPopMatrix();
+	moves++;
 	myAI.moveAI();
 }
 background::~background() {
@@ -321,7 +322,7 @@ void AI::moveAI()//has to be called after a player movement
 			min = distance;
 		}
 		distance = sqrtf((myPlayer.y - (y[counter]+1))*(myPlayer.y - (y[counter]+1))) + ((myPlayer.x - x[counter])*(myPlayer.x - x[counter]));
-		if(distance < min && y[counter] + 1 < ySize - 1 && myBackground.squares[x[counter]][y[counter]+1] != 1 && myBackground.squares[x[counter]][y[counter]+1] != 3) { 
+		if(distance < min && y[counter] + 1 < ySize && myBackground.squares[x[counter]][y[counter]+1] != 1 && myBackground.squares[x[counter]][y[counter]+1] != 3) { 
 			direction = UP;
 			min = distance;
 		}
@@ -336,7 +337,7 @@ void AI::moveAI()//has to be called after a player movement
 			min = distance;
 		}
 		distance = sqrtf((myPlayer.y - y[counter])*(myPlayer.y - y[counter])) + ((myPlayer.x - (x[counter]+1))*(myPlayer.x - (x[counter]+1)));
-		if(distance < min && x[counter] + 1 < xSize - 1 && myBackground.squares[x[counter]+1][y[counter]] != 1 && myBackground.squares[x[counter]+1][y[counter]] != 3) {
+		if(distance < min && x[counter] + 1 < xSize && myBackground.squares[x[counter]+1][y[counter]] != 1 && myBackground.squares[x[counter]+1][y[counter]] != 3) {
 			direction = RIGHT;
 			min = distance;
 		}
@@ -380,6 +381,7 @@ void display() {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	if(start)
 	{
+	myBackground.moves = 0;
 	myBackground.drawSquares();
 	myBackground.drawPlayer();
 	myAI.createAI();
@@ -466,7 +468,7 @@ void init() {
     glClearColor(0.8, 0.8, 0, 0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, 1, 1, 200);
+	gluPerspective(60, 1, 1, 500);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
