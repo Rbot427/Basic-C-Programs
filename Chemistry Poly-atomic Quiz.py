@@ -1,0 +1,22 @@
+import random
+fowardPoly = {"Nitrate":"NO3-",
+              "Nitrite":"NO2-",
+              "Chromate":"CrO4-2",
+              "Dichromate":"Cr2O7-2",
+              "Cyanide":"CN-",
+              "Permanganate":"MnO4-",
+              "Hydroxide":"OH-",
+              "Carbonate":"CO3-2",
+              "Sulfate":"SO4-2",
+              "Sulfite":"SO3-2",
+              "Oxalate":"C2O4-2",
+              "Phosphate":"PO4-3",
+              "Acetate":"C2H3O2-",
+              "Perchlorate":"ClO4-",
+              "Chlorate":"ClO3-",
+              "Chlorite":"ClO2-",
+              "Hypochlorite":"ClO-",
+              "Hydrogen Carbonate (AKA bicarbonate)":"HCO3-",
+              "Thiocyanate":"SCN-",
+              "Ammonium":"NH4+"}
+
