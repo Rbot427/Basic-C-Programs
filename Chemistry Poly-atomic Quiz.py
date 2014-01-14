@@ -39,3 +39,25 @@ index = ["Nitrate",
               "Hydrogen Carbonate (AKA bicarbonate)",
               "Thiocyanate",
               "Ammonium"]
+def printWel():
+              print("""Welcome to the Chemistry Poly-Atomic Quiz
+              
+              0: Exits
+              1: Start quiz in order
+              2: Start quiz in random order
+              """)
+              
+#Start of the program
+length = 0
+printWel()
+num = int(input("Enter a number: "))
+while num != 0:
+              if num == 1:
+                            for i in fowardPoly:
+                                          print("What is", index[i], "?")
+                                          answer = input("")
+                                          if answer == fowardPoly[index[i]]:
+                                                        print("CORRECT!")
+                                          else:
+                                                        print("WRONG!")
+                                          
