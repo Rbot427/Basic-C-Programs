@@ -41,23 +41,42 @@ index = ["Nitrate",
               "Ammonium"]
 def printWel():
               print("""Welcome to the Chemistry Poly-Atomic Quiz
-              
+
               0: Exits
               1: Start quiz in order
               2: Start quiz in random order
               """)
-              
+
 #Start of the program
-length = 0
 printWel()
-num = int(input("Enter a number: "))
+num = -1
 while num != 0:
-              if num == 1:
-                            for i in fowardPoly:
-                                          print("What is", index[i], "?")
-                                          answer = input("")
-                                          if answer == fowardPoly[index[i]]:
-                                                        print("CORRECT!")
-                                          else:
-                                                        print("WRONG!")
-                                          
+    num = int(input("Enter a number: "))
+    used = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+    counter = 0
+    if num == 1:
+        for i in fowardPoly:
+            print("What is", index[counter], "?")
+            answer = input("")
+            if str(answer) == fowardPoly[index[counter]]:
+                print("CORRECT!")
+            else:
+                print("WRONG!")
+            counter+= 1
+    if num == 2:
+        while counter != 20:
+            number = random.randint(0, 19)
+            if number not in used:
+                print("What is", index[number], "?")
+                answer = input("")
+                if str(answer) == fowardPoly[index[number]]:
+                    print("CORRECT!")
+                    used[counter] = number
+                    counter+=1
+                else:
+                    print("WRONG!")
+            
+    printWel()
+    
+                                        
+
