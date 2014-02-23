@@ -75,8 +75,3 @@ while num != 0:
                     counter+=1
                 else:
                     print("WRONG!")
-            
-    printWel()
-    
-                                        
-
